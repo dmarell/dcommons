@@ -11,14 +11,9 @@
 
     <name>dcommons</name>
     <description>Scattered generic classes with no other home.</description>
-    <url>http://marellbox.marell.se/bundles/dcommons</url>
+    <url>http://github.com/dmarell/dcommons</url>
 
     <distributionManagement>
-        <site>
-            <id>marell</id>
-            <url>file:///var/www/marellbox/bundles/dcommons</url>
-        </site>
-
         <repository>
             <id>marell</id>
             <url>http://marell.se/nexus/content/repositories/releases</url>
@@ -53,14 +48,12 @@
     </developers>
 
     <dependencies>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -74,7 +67,6 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
-
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.6</version>
@@ -82,7 +74,6 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -100,7 +91,6 @@
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -115,7 +105,6 @@
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <!-- mvn org.apache.felix:maven-bundle-plugin:bundle -->
                 <groupId>org.apache.felix</groupId>
@@ -133,22 +122,6 @@
                     </instructions>
                 </configuration>
             </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>2.7</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <outputEncoding>UTF-8</outputEncoding>
-                </configuration>
-            </plugin>
-
             <plugin>
                 <artifactId>maven-scm-plugin</artifactId>
                 <version>1.9</version>
@@ -158,28 +131,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <reporting>
-        <outputDirectory>${project.build.directory}/site</outputDirectory>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>2.7</version>
-                <configuration>
-                    <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
-                    <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
-                <configuration>
-                    <encoding>UTF-8</encoding>
-                </configuration>
-            </plugin>
-        </plugins>
-    </reporting>
-
 </project>
