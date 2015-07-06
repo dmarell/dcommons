@@ -1,0 +1,190 @@
+Package util
+
+ This package in extension to <<<java.util>>>.
+
+* AbstractAdapterIterator
+
+ A thin abstraction and a simple class supporting the pattern adapting from type A
+ to type B while iterating a collection of type A. Left to implement is the next-method which performs the
+ custom conversion. The main motivation of this pattern is when you have a consumer of Iterable\<B\>, your source is
+ an Iterable\<A\> and the collection is expensive to copy.
+
+ It is more of like a demonstration of a pattern than an actually useful base class.
+
+ The following implementation converts Double:s to Integer:s while iterating:
+
++--------------------------------------+
+class D2iAdapterIterator extends AbstractAdapterIterator<Integer, Double> {
+  public D2iAdapterIterator(Iterator<Double> adaptedIter) {
+    super(adaptedIter);
+  }
+
+  @Override
+  public Integer next() {
+    Double dval = adaptedIter.next();
+    return (int) (dval + 0.5); // Convert Double to Integer, round value
+  }
+}
++--------------------------------------+
+
+ It can be used like this:
+
++--------------------------------------+
+List<Double> doubles = new ArrayList<Double>() {{ add(0.9); add(2.4); add(2.5); }};
+
+Iterator<Integer> iter = new D2iAdapterIterator(doubles.iterator());
+while (iter.hasNext()) {
+  Integer value = iter.next(); // Get the rounded value from the Double collection
+  ...
+}
++--------------------------------------+
+
+ or like this:
+
++--------------------------------------+
+void consume(Iterable<Integer> integers) { ... }
+...
+consume(new Iterable<Integer>() {
+  @Override
+  public Iterator<Integer> iterator() {
+    return new D2iAdapterIterator(doubles.iterator());
+  }
+});
++--------------------------------------+
+
+* ChainedIterables
+
+ <<<ChainedIterables>>> is an adapter class supporting iterating several iterables while having them to look like a single
+ iterable. The purpose of using <<<ChainedIterables>>> instead of adding the content of each iterable to
+ for example an <<<ArrayList>>> and iterate this list is that the collections are not copied. I a sense <<<ChainedIterables>>>
+ provides a view to the existing collections. <<<ChainedIterables>>> does not touch list nor objects in iterables
+ before actually iterating them which is valuable for example if the iterators implements lazy evaluation.
+
+ The motivations of this class are when you have a consumer of Iterable\<B\>, your sources are multiple Iterable\<A\>
+ and these collection are expensive to copy and/or it is expensive to hit the iterated objects, for example because
+ they implement lazy evaluation.
+
+ Assuming you have a number of iterables like this:
+
++--------------------------------------+
+List<Iterable<? extends MyBean>> iterables = ...
++--------------------------------------+
+
+ and that you want to pass these iterables to a method taking Iterable\<MyBean\> as a parameter you
+ wrap the list in a <<<ChainedIterables>>> object:
+
++--------------------------------------+
+void consume(Iterable<MyBean> beans) { ... }
+...
+consume(new ChainedIterables<MyBean>(iterables));
++--------------------------------------+
+
+ Object in the lists are accessed directly in their source lists and the lists are not copied nor even touched until
+ the consume method is iterating the object.
+
+ Iterating all MyBean objects without <<<ChainedIterables>>> requires a nested loop:
+
++--------------------------------------+
+for (Iterable<? extends MyBean> iter : iterables) {
+  while (iter.hasNext()) {
+    MyBean bean = iter.next();
+    ...
+  }
+}
++--------------------------------------+
+
+ with <<<ChainedIterables>>> there is only need for a flat, single loop:
+
++--------------------------------------+
+for (MyBean bean : new ChainedIterables<MyBean>(iterables)) {
+  ...
+}
++--------------------------------------+
+
+* NestedIterator
+
+ Supports iterating child objects in a structure of any depth making it look like a flat
+ iteration without touching objects before iterating them.
+
+ An example will help.
+
+ Assume an object hierarchy in three levels, exemplified with
+ mobile network entities: Site, BaseStation, Cell. A Site can have one or more Base stations and each Base station
+ has one or more cells:
+
+[images/site-bs-cell.jpg]
+
+ An iteration across all cells without <<<NestedIterator>>> can look like this:
+
++--------------------------------------+
+List<Site> sites = ...
+for (Site s : sites) {
+  for (BaseStation bs : s.getBaseStations()) {
+    for (Cell c : bs.getCells()) {
+      System.out.println("Cell " + c.getName());
+    }
+  }
+}
++--------------------------------------+
+
+ and with <<<NestedIterator>>>:
+
++--------------------------------------+
+Iterator<Cell> cellIter = new CellIterator(new BaseStationIterator(sites.iterator()));
+while (cellIter.hasNext()) {
+  Cell c = cellIter.next();
+  System.out.println("Cell " + c);
+  ++count;
+}
++--------------------------------------+
+
+ Passing all cells to a method taking Iterable<Cell>
+
++--------------------------------------+
+void consume(Iterable<Cell> cells) { ... }
+...
+final Iterator<Cell> cellIter = new CellIterator(new BaseStationIterator(sites.iterator()));
+consume(new Iterable<Cell>() {
+  @Override
+  public Iterator<Cell> iterator() {
+    return cellIter;
+  }
+});
++--------------------------------------+
+
+* Filter
+
+ Filter is a base class defining an interface of filters in the meaning of sluggish variables.
+ Filter can be instantiated by itself and performs no filtering.
+
+* FilterSIIR
+
+ Performs simple IIR-filtering according to the formula:
+
++--------------------------------------+
+outLevel = ( (length - 1) * outLevel + inLevel ) / length
++--------------------------------------+
+
+* HexUtil
+
+ HexUtil is a utility class for converting a byte{} from and to Hex string.
+
++---------------------------------
+byte[] arr = new byte[] {1, 0, -128, 0x7f};
+String s = HexUtil.asHex(arr);
+// s contains "0100807f"
+HexUtil.isHexString("10af32"); // evaluates to true
+HexUtil.isHexString("foobar"); // evaluates to false
++---------------------------------
+
+* MutableElementQueue
+
+ A queue with pre-allocated elements. Elements must be mutable in order
+ for this queue to be useful because the objects in it cannot be replaced after initialization. This
+ technique supports queue operation with no heap allocation of objects. This implementation is not thread safe.
+
+* QueueBuffer
+
+ Use instead of LinkedList if you have a fixed maximum size of the buffer and if you are worried
+ about that the LinkedList implementation is allocating a list node-object in addition to the objects you are
+ storing in the queue.

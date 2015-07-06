@@ -1,0 +1,52 @@
+Package progress
+
+ The progress package supports tracking lengty tasks while executing. The progress support is centered
+ around the interface <<<ProgressTracker>>>. It is used by lengthy tasks, probably executing in dedicated threads,
+ to report their progress somewhere.
+
+ An important goal is that it should be possible to design a length task without knowing where it should report
+ back - if it is a swing GUI, a web application, a console application or something else, the lengthy task should
+ not have to know.
+
+ Example of a length task using a <<<ProgressTracker>>>:
+
++--------------------------------------+
+public class LengthyTask {
+  public void run(final ProgressTracker pt, final int length) {
+    for (int i = 0; i < length; ++i) {
+      // Lengthy work here
+
+      // Update progress and check if cancelled
+      pt.setProgressLabel("Executing step " + i + " of " + length);
+      pt.setTotalProgress(i / (float) length);
+      if (pt.isCancelled()) {
+        return;
+      }
+    }
+  }
+}
++--------------------------------------+
+
+ LengthyTask could be called with a <<<PrintlnProgressTracker>>> which reports progress by printing to standard output.
+
++--------------------------------------+
+LengthyTask task = new LengthyTask();
+task.run(new PrintlnProgressTracker(), 100);
++--------------------------------------+
+
+ or an <<<EmptyProgressTracker>>> in order to redirect output to /dev/null:
+
++--------------------------------------+
+task.run(new EmptyProgressTracker(), 100);
++--------------------------------------+
+
+ a <<<ProgressCombiner>>> is used to combine several <<<ProgressTracker>>> to one, assigning them individual weights.
+ This is useful if a task consists of sub tasks, where each sub task reports its progress using
+ a <<<ProgressTracker>>>.
+
+ The <<<ProgressTrackerAdapter>>> implements all methods in <<<ProgressTracker>>>. Override exactly what is needed
+ instead of having to implement the complete interface.
+
+ <<<TrackedInputStream>>> and <<<TrackedReader>>> reports reading while reporting progress using a <<<ProgressTracker>>>.
+
+ <<<TrackedObjectOutputStream>>> reports progress while writing an <<<ObjectOutputStream>>>.

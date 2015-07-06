@@ -1,0 +1,51 @@
+Release notes
+
+* Version 2.0.7 - 2014-12-28
+
+ * Added EventScheduler
+
+ * SwedishHolidayExplorer: Fixed bug related to "Alla helgons dag" 6/11 (2020, 2055)
+
+ * More conversions related to time and date classes in Java 8
+
+* Version 2.0.0 - 2014-12-16
+
+ * Java 8
+
+ * Added DateUtils.getLocalDateTime(long timeInMillis)
+
+* Version 1.1.21 - 2014-02-08
+
+ * Java 7
+
+ * Changed pom versioning mechanism.
+
+ * Extended site information.
+
+ * Updated versions of dependencies
+
+* Version 1.1 - 2012-07-08
+
+ * Extended the documentation
+
+ * EventWeekTimer --> StateScheduler + extensions montly, yearly and once
+
+ * Added FixedTimeSource
+
+ * Merged packed misc into util. Removed CacheManager
+
+ * Extended ProgressTracker
+
+ * ProgressSplitter --> ProgressCombiner
+
+ * Extended DateUtils
+
+ * Renamed Holiday --> HolidayExplorer and extended interface with enumerations and support for multiple holidays per date
+
+ * Upgraded library versions
+
+ * Improved unit test coverage
+
+* Version 1.0 - 2011-10-30
+
+  First version released open source.

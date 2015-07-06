@@ -1,0 +1,13 @@
+Package sound
+
+ Sound related utilities on top of the Java Sound API.
+
+ <<<SoundClip>>> plays a clip of a limited length (unlike a stream) on a specific <<<SoundOutputDevice>>>.
+
+ Usage example:
+
++-----------------------------------------+
+SoundPlayerDevice device = SoundPlayerDevice.createSoundPlayerDevice("Intel.*");
+SoundClip clip = new SoundClip(new File("aieeh.wav"));
+clip.play(device);
++-----------------------------------------+

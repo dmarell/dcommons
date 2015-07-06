@@ -1,0 +1,101 @@
+Package time
+
+ Time and date related classes.
+
+* TimeSource
+
+ <<<TimeSource>>> is an interface representing a source of time, e.g., <<<System.currentTimeMillis>>>.
+ The purpose is to enable setting time to something else than the system time in order to enable for
+ example time dependent tests without modifying the system time.
+
++--------------------------------------+
+public interface TimeSource {
+  /**
+   * Returns the current time in milliseconds. @see System#currentTimeMillis().
+   *
+   * @return time in milliseconds
+   */
+  long currentTimeMillis();
+
+  /**
+   * Returns the current value of the running Java Virtual Machine's
+   * high-resolution time source, in nanoseconds.  @see System#nanoTime().
+   *
+   * @return time in nanoseconds
+   */
+  long nanoTime();
+}
++--------------------------------------+
+
+ <<<DefaultTimeSource>>> implements <<<TimeSource>>> using <<<System.currentTimeMillis>>> and <<<System.nanoTime>>>.
+
+ <<<FixedTimeSource>>> allows for setting and advancing time. This is useful in unit testing. Example:
+
++--------------------------------------+
+FixedTimeSource ts = new FixedTimeSource("2012-06-07 06:00:00");
+...
+ts.setDateAndTime("2012-06-07 06:11:00");
+...
+ts.advanceTime(60 * 1000); // one minute
++--------------------------------------+
+
+* HolidayExplorer
+
+ <<<HolidayExplorer>>>, and the implementation <<<SwedishHoliday>>>, is used for
+ checking if a day is a holiday or not, and if it is a holiday, the local name of it. Holidays for a given year can be
+ enumerated.
+
++--------------------------------------+
+HolidayExplorer h = new SwedishHolidayExplorer();
+System.out.println(h.getHoliday(DateUtils.parse("2012-06-06")));
++--------------------------------------+
+
+ will print "Nationaldagen", which is the name of a Swedish holiday. The function returns <<<null>>> if there is
+ no holiday at this date.
+
+* StateScheduler
+
+ <<<StateScheduler>>> schedules events changing a state of something. Events can be scheduled daily, weekly, monthly
+ yearly or once and modifiers for selecting working and non-working days can be specified.
+
+ Initialization example:
+
++--------------------------------------+
+HolidayExplorer holidayExplorer = new SwedishHolidayExplorer();
+StateScheduler<Boolean> scheduler = new StateScheduler<Boolean>(holidayExplorer, false);
+scheduler.addEvent(new StateScheduler.Event<Boolean>(new TimeOfDay(19, 0, 0), true)); // Turn on lamps 19:00:00
+scheduler.addEvent(new StateScheduler.Event<Boolean>(new TimeOfDay(23, 0, 0), false)); // Turn off lamps 23:00:00
+turnOutdoorLamps(scheduler.getCurrentState());
++--------------------------------------+
+
+ At intervals, execute:
+
++--------------------------------------+
+StateScheduler.Event<Boolean> event = scheduler.getNewState();
+if (event != null) {
+  turnOutdoorLamps(event.getState());
+}
++--------------------------------------+
+
+* EventScheduler
+
+ <<<EventScheduler>>> schedules events without imposing a state on the scheduled event (unlike StateScheduler).
+ Events can be scheduled daily, weekly, monthly yearly or once and modifiers for selecting working and non-working
+ days can be specified.
+
+ Initialization example:
+
++--------------------------------------+
+EventScheduler<Boolean> scheduler = new EventScheduler<>(h);
+scheduler.addEvent(new SchedulerEvent<>(LocalTime.parse("19:00:00"), true));
+scheduler.addEvent(new SchedulerEvent<>(LocalTime.parse("23:00:00"), false));
++--------------------------------------+
+
+ At intervals, execute:
+
++--------------------------------------+
+SchedulerEvent<Boolean> e = scheduler.consumeEvent();
+if (e != null) {
+   turnLampSwitch(e.getState());
+}
++--------------------------------------+
