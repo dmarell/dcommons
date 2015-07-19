@@ -19,17 +19,15 @@ The library is packaged as an OSGi bundle.
 <dependency>
   <groupId>se.marell</groupId>
   <artifactId>dcommons</artifactId>
-  <version>2.0.8</version>
+  <version>2.0.9</version>
 </dependency>
 ...
-<repository>
-  <id>marell</id>
-  <url>http://marell.se/nexus/content/repositories/releases/</url>
-</repository>
-``` 
+```
 
 ## Release notes
 
+* Version 2.0.9 - 2015-07-19
+  * Changed repo url
 * Version 2.0.8 - 2015-07-06
   * Moved code to github
   * Replaced site plugin with README.md
