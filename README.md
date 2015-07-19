@@ -15,7 +15,14 @@ The library is packaged as an OSGi bundle.
 
 ## Maven usage
 
-``` 
+```
+<repositories>
+  <repository>
+    <id>marell</id>
+    <url>http://marell.se/artifactory/libs-release</url>
+  </repository>
+</repositories>
+...
 <dependency>
   <groupId>se.marell</groupId>
   <artifactId>dcommons</artifactId>

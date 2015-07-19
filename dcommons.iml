@@ -2,9 +2,10 @@
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="Osmorc" name="OSGi">
-      <configuration manifestGenerationMode="OsmorcControlled" manifestLocation="" jarfileLocation="dcommons-0-SNAPSHOT.jar" outputPathType="CompilerOutputPath" bndFileLocation="" bundlorFileLocation="" bundleActivator="" bundleSymbolicName="se.marell.dcommons" bundleVersion="2.0.9-SNAPSHOT" ignoreFilePattern="" useProjectDefaultManifestFileLocation="true" alwaysRebuildBundleJAR="false" doNotSynchronizeWithMaven="false">
+      <configuration manifestGenerationMode="OsmorcControlled" manifestLocation="" jarfileLocation="dcommons-0-SNAPSHOT.jar" outputPathType="CompilerOutputPath" bndFileLocation="" bundlorFileLocation="" bundleActivator="" bundleSymbolicName="se.marell.dcommons" bundleVersion="0-SNAPSHOT" ignoreFilePattern="" useProjectDefaultManifestFileLocation="true" alwaysRebuildBundleJAR="false" doNotSynchronizeWithMaven="false">
         <additionalProperties>
-          <property key="Bundle-Name" value="dcommons - 2.0.9-SNAPSHOT" />
+          <property key="Bundle-Description" value="Scattered generic classes with no other home." />
+          <property key="Bundle-Name" value="dcommons - 0-SNAPSHOT" />
           <property key="Export-Package" value="se.marell.dcommons.*" />
           <property key="Include-Resource" value="doorbell.wav=$MODULE_DIR$/src/main/resources/doorbell.wav" />
         </additionalProperties>
